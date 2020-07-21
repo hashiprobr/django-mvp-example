@@ -1,0 +1,114 @@
+html {
+    height: 100%;
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+body {
+    height: 100%;
+    padding: 1rem 1rem 0;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+section {
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+form {
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+form ul {
+    margin-bottom: .5rem;
+    margin-left: 1rem;
+    font-size: .75rem;
+    color: #ff0000;
+    list-style-type: disc;
+}
+
+label {
+    display: flex;
+    width: 100%;
+    margin-bottom: 1rem;
+    align-items: baseline;
+}
+
+input[type="text"] {
+    flex-grow: 1;
+    margin-left: .5rem;
+}
+
+input[type="checkbox"] {
+    margin-right: .5rem;
+}
+
+a {
+    font-family: monospace;
+    text-decoration: none;
+    color: #000000;
+}
+a:hover {
+    text-decoration: underline;
+    color: #0000ff;
+}
+
+.delete {
+    font-size: .75rem;
+}
+.delete a {
+    vertical-align: middle;
+}
+.delete a:hover {
+    text-decoration: none;
+    color: #ff0000;
+}
+
+.folder {
+    border-radius: 1rem;
+}
+.public {
+    background-color: #d9ead3;
+}
+.private {
+    background-color: #f4cccc;
+}
+
+.full {
+    margin-left: 1rem;
+}
+.full li {
+    margin-top: 1rem;
+}
+.empty {
+    margin-top: 1rem;
+    margin-left: 1rem;
+    font-style: italic;
+}
+
+.chat {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 1rem 1rem 0rem 0rem;
+    padding: 1rem;
+    background-color: #000000;
+    color: #00ff00;
+}
+
+.log {
+    margin-bottom: 1rem;
+}
+
+.input {
+    border: 1px solid #00ff00;
+    background-color: #000000;
+    color: #00ff00;
+}

@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <title>Drive</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+        <link rel="stylesheet" href="{% static 'drive/css/style.css' %}">
+        {% if debug %}<script>const DEBUG = true;</script>{% endif %}
+        <script src="{% static 'js/producer.js' %}"></script>
+        <script src="{% static 'drive/js/script.js' %}"></script>
+    </head>
+    <body>
+        <section>
+            <h1>Add new file</h1>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form.data.errors }}
+                <label for="{{ form.data.id_for_label }}">
+                    {{ form.data }}
+                </label>
+
+                {{ form.description.errors }}
+                <label for="{{ form.description.id_for_label }}">
+                    {{ form.description.label }}
+                    {{ form.description }}
+                </label>
+
+                {{ form.private.errors }}
+                <label for="{{ form.private.id_for_label }}">
+                    {{ form.private }}
+                    {{ form.private.label }}
+                </label>
+
+                <input type="submit" value="Add"> <span></span>
+            </form>
+        </section>
+
+        <section class="folder public">
+            <h1>Public files</h1>
+
+            {% if public %}
+            <ul class="full">
+            {% for file in public %}
+                <li>
+                    <p><a href="{{ file.data.url }}">{{ file.data.name }}</a> <span class="delete">[<a href="{% url 'pubdel' file.id %}">❌</a>]</span></p>
+                    <p>{{ file.description }}</p>
+                    <P></p>
+                </li>
+            {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty">
+                No public files added.
+            </p>
+            {% endif %}
+        </section>
+
+        <section class="folder private">
+            <h1>Private files</h1>
+
+            {% if private %}
+            <ul class="full">
+            {% for file in private %}
+                <li>
+                    <p><a href="{{ file.data.url }}">{{ file.data.name }}</a> <span class="delete">[<a href="{% url 'privdel' file.id %}">❌</a>]</span></p>
+                    <p>{{ file.description }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty">
+                No private files added.
+            </p>
+            {% endif %}
+        </section>
+
+        <div class="chat">
+            <pre class="log"></pre>
+            <input class="input">
+        </div>
+    </body>
+</html>
