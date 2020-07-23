@@ -1,9 +1,9 @@
 import os
 
-from example.tests import AcceptanceTestCase, Keys
+from example.tests import AcceptanceAsyncTestCase, Keys
 
 
-class ConsumerTests(AcceptanceTestCase):
+class ConsumerTests(AcceptanceAsyncTestCase):
     description = 'description'
 
     def upload(self, files_dir, private):
