@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -13,7 +14,11 @@ class OverwriteStorage:
 
 
 class LocalStorage(OverwriteStorage, FileSystemStorage):
-    pass
+    def clear(self):
+        try:
+            shutil.rmtree(self.location)
+        except FileNotFoundError:
+            pass
 
 
 class PublicLocalStorage(LocalStorage):
@@ -27,8 +32,6 @@ class PrivateLocalStorage(LocalStorage):
 
 
 class RemoteStorage(OverwriteStorage, S3Boto3Storage):
-    override_url = settings.AWS_S3_OVERRIDE_URL
-
     # TEMP: Force an extra GET between saves to avoid triggering
     # the issue boto/boto3#1341. This is inefficient and can be
     # removed if the pull request boto/botocore#1328 is accepted.
@@ -37,10 +40,13 @@ class RemoteStorage(OverwriteStorage, S3Boto3Storage):
         self.size(name)
         return name
 
+    def clear(self):
+        self.bucket.objects.delete()
+
     def url(self, name, parameters=None, expire=None):
         url = super().url(name, parameters, expire)
-        if self.override_url:
-            url = url.replace(self.endpoint_url, self.override_url)
+        if settings.AWS_S3_OVERRIDE_URL:
+            url = url.replace(settings.AWS_S3_ENDPOINT_URL, settings.AWS_S3_OVERRIDE_URL)
         return url
 
 
