@@ -73,26 +73,16 @@ class DriveViewTests(ViewTests):
 
 class DelTests:
     def test(self):
-        file = self.create(self.description, self.name, self.content)
+        file = self.create(self.description, self.name, self.content, self.DriveFile)
         self.post(kwargs={'pk': file.pk})
-        self.assertFalse(self.retrieve(file.pk))
+        self.assertFalse(self.DriveFile.objects.filter(pk=file.pk).exists())
 
 
 class PubDelViewTests(DelTests, ViewTests):
     view_name = 'pubdel'
-
-    def create(self, description, name, content):
-        return super().create(description, name, content, PublicFile)
-
-    def retrieve(self, pk):
-        return PublicFile.objects.filter(pk=pk).exists()
+    DriveFile = PublicFile
 
 
 class PrivDelViewTests(DelTests, ViewTests):
     view_name = 'privdel'
-
-    def create(self, description, name, content):
-        return super().create(description, name, content, PrivateFile)
-
-    def retrieve(self, pk):
-        return PrivateFile.objects.filter(pk=pk).exists()
+    DriveFile = PrivateFile
