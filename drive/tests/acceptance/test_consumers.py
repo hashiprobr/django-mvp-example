@@ -29,8 +29,7 @@ class ConsumerTests(AcceptanceAsyncTestCase):
             input_submit.click()
 
             folder = self.wait(5, self.driver.find_enabled, selector)
-            lis = self.wait(5, folder.find_exactly, i + 1, 'li')
-            li = lis[i]
+            li = self.wait(5, folder.find_exactly, i + 1, 'li')[i]
 
             a = li.find_one('a')
             p = li.find('p')[1]
@@ -41,6 +40,7 @@ class ConsumerTests(AcceptanceAsyncTestCase):
         for i in range(len(names), 0, -1):
             folder = self.wait(5, self.driver.find_enabled, selector)
             li = self.wait(5, folder.find_exactly, i, 'li')[0]
+
             a = self.wait(5, li.find_exactly, 2, 'a')[1]
             a.click()
 
