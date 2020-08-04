@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     let form = document.querySelector('form');
     let span = document.querySelector('span');
 
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let producer = new ChatProducer('drive/chat');
 
-    input.addEventListener('keydown', function(event) {
+    input.addEventListener('keydown', function (event) {
         if (event.code == 'Enter' && input.value != '') {
             producer.sendServer('post', input.value);
             input.value = '';
