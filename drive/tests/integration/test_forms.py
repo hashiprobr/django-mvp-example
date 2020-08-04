@@ -10,7 +10,8 @@ from ...forms import FileForm
 
 class FileFormTests(IntegrationTestCase):
     description = 'd'
-    blank_description = ''
+    empty_description = ''
+    white_description = ' \t\n'
     upper_description = (DriveFile.description.field.max_length + 1) * 'd'
     other_description = 'od'
 
@@ -18,7 +19,7 @@ class FileFormTests(IntegrationTestCase):
     other_name = 'on'
 
     content = b'c'
-    blank_content = b''
+    empty_content = b''
     other_content = b'oc'
 
     def open(self, name, content, existing):
@@ -52,14 +53,14 @@ class FileFormTests(IntegrationTestCase):
         with self.assertRaises(KeyError):
             self.isValid(description, uploaded, private)
 
+    def testValidWithoutPrivate(self):
+        self.assertValid(self.description, (self.name, self.content, None), None)
+
     def testValidWithFalsePrivate(self):
         self.assertValid(self.description, (self.name, self.content, None), False)
 
     def testValidWithTruePrivate(self):
         self.assertValid(self.description, (self.name, self.content, None), True)
-
-    def testValidWithoutPrivate(self):
-        self.assertValid(self.description, (self.name, self.content, None), None)
 
     def testRaisesKeyErrorWithoutDescriptionAndFalsePrivate(self):
         self.assertRaisesKeyError(None, (self.name, self.content, None), False)
@@ -67,11 +68,17 @@ class FileFormTests(IntegrationTestCase):
     def testRaisesKeyErrorWithoutDescriptionAndTruePrivate(self):
         self.assertRaisesKeyError(None, (self.name, self.content, None), True)
 
-    def testRaisesKeyErrorWithBlankDescriptionAndFalsePrivate(self):
-        self.assertRaisesKeyError(self.blank_description, (self.name, self.content, None), False)
+    def testRaisesKeyErrorWithEmptyDescriptionAndFalsePrivate(self):
+        self.assertRaisesKeyError(self.empty_description, (self.name, self.content, None), False)
 
-    def testRaisesKeyErrorWithBlankDescriptionAndTruePrivate(self):
-        self.assertRaisesKeyError(self.blank_description, (self.name, self.content, None), True)
+    def testRaisesKeyErrorWithEmptyDescriptionAndTruePrivate(self):
+        self.assertRaisesKeyError(self.empty_description, (self.name, self.content, None), True)
+
+    def testRaisesKeyErrorWithWhiteDescriptionAndFalsePrivate(self):
+        self.assertRaisesKeyError(self.white_description, (self.name, self.content, None), False)
+
+    def testRaisesKeyErrorWithWhiteDescriptionAndTruePrivate(self):
+        self.assertRaisesKeyError(self.white_description, (self.name, self.content, None), True)
 
     def testNotValidWithUpperDescriptionAndFalsePrivate(self):
         self.assertNotValid(self.upper_description, (self.name, self.content, None), False)
@@ -85,11 +92,11 @@ class FileFormTests(IntegrationTestCase):
     def testRaisesKeyErrorWithoutUploadedAndTruePrivate(self):
         self.assertRaisesKeyError(self.description, None, True)
 
-    def testValidWithBlankContentAndFalsePrivate(self):
-        self.assertValid(self.description, (self.name, self.blank_content, None), False)
+    def testValidWithEmptyContentAndFalsePrivate(self):
+        self.assertValid(self.description, (self.name, self.empty_content, None), False)
 
-    def testValidWithBlankContentAndTruePrivate(self):
-        self.assertValid(self.description, (self.name, self.blank_content, None), True)
+    def testValidWithEmptyContentAndTruePrivate(self):
+        self.assertValid(self.description, (self.name, self.empty_content, None), True)
 
     def testNotValidIfPublicFileWithSameNameExistsAndFalsePrivate(self):
         self.assertNotValid(self.description, (self.name, self.content, (self.other_description, self.name, self.other_content, PublicFile)), False)

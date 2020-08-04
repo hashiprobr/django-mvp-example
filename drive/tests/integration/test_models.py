@@ -27,28 +27,37 @@ class FileTests:
 
     def retrieve(self, name, content):
         data = self.open(name, content)
-        return self.DriveFile.objects.filter(data=data)
+        return self.DriveFile.objects.filter(data=data).exists()
 
     def delete(self, name, content):
         data = self.open(name, content)
         self.DriveFile.objects.filter(data=data).delete()
 
-    def testRaisesIntegrityErrorIfCreateWithNoneDescription(self):
+    def assertRaisesIntegrityErrorIfCreate(self, description, name, content):
         with self.assertRaises(IntegrityError):
-            self.create(None, self.name, self.content)
+            self.create(description, name, content)
+
+    def assertRetrieves(self, name, content):
+        self.assertTrue(self.retrieve(name, content))
+
+    def assertDoesNotRetrieve(self, name, content):
+        self.assertFalse(self.retrieve(name, content))
+
+    def testRaisesIntegrityErrorIfCreateWithNoneDescription(self):
+        self.assertRaisesIntegrityErrorIfCreate(None, self.name, self.content)
 
     def testRetrievesByNameAfterCreate(self):
         self.create(self.description, self.name, self.content)
-        self.assertTrue(self.retrieve(self.name, self.other_content))
+        self.assertRetrieves(self.name, self.other_content)
 
     def testDoesNotRetrieveByContentAfterCreate(self):
         self.create(self.description, self.name, self.content)
-        self.assertFalse(self.retrieve(self.other_name, self.content))
+        self.assertDoesNotRetrieve(self.other_name, self.content)
 
     def testDoesNotRetrieveAfterCreateAndDeleteByName(self):
         self.create(self.description, self.name, self.content)
         self.delete(self.name, self.other_content)
-        self.assertFalse(self.retrieve(self.name, self.content))
+        self.assertDoesNotRetrieve(self.name, self.content)
 
 
 class PublicFileTests(FileTests, IntegrationTestCase):

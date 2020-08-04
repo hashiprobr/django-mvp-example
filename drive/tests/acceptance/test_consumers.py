@@ -7,7 +7,11 @@ class ConsumerTests(AcceptanceAsyncTestCase):
     description = 'description'
 
     def upload(self, files_dir, private):
-        for i, name in enumerate(os.listdir(files_dir)):
+        names = os.listdir(files_dir)
+
+        selector = '.private' if private else '.public'
+
+        for i, name in enumerate(names):
             path = os.path.join(files_dir, name)
             description = '{}{}'.format(self.description, i)
 
@@ -24,8 +28,7 @@ class ConsumerTests(AcceptanceAsyncTestCase):
             input_submit = self.driver.find_one('input[type="submit"]')
             input_submit.click()
 
-            folder = self.wait(5, self.driver.find_enabled, '.private' if private else '.public')
-            self.wait(5, folder.find_one, 'li')
+            folder = self.wait(5, self.driver.find_enabled, selector)
             lis = self.wait(5, folder.find_exactly, i + 1, 'li')
             li = lis[i]
 
@@ -34,6 +37,15 @@ class ConsumerTests(AcceptanceAsyncTestCase):
 
             self.assertEqual(name, self.text(a))
             self.assertEqual(description, self.text(p))
+
+        for i in range(len(names), 0, -1):
+            folder = self.wait(5, self.driver.find_enabled, selector)
+            li = self.wait(5, folder.find_exactly, i, 'li')[0]
+            a = self.wait(5, li.find_exactly, 2, 'a')[1]
+            a.click()
+
+            input_submit = self.driver.find_one('input[type="submit"]')
+            input_submit.click()
 
     def testUpload(self):
         self.get('drive')
