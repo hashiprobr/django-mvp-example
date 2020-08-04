@@ -71,14 +71,14 @@ class DriveViewTests(ViewTests):
         self.assertEqual(self.n, len(html.select('.private li')))
 
 
-class DelViewTests:
+class DelTests:
     def test(self):
         file = self.create(self.description, self.name, self.content)
         self.post(kwargs={'pk': file.pk})
         self.assertFalse(self.retrieve(file.pk))
 
 
-class PubDelViewTests(DelViewTests, ViewTests):
+class PubDelViewTests(DelTests, ViewTests):
     view_name = 'pubdel'
 
     def create(self, description, name, content):
@@ -88,7 +88,7 @@ class PubDelViewTests(DelViewTests, ViewTests):
         return PublicFile.objects.filter(pk=pk).exists()
 
 
-class PrivDelViewTests(DelViewTests, ViewTests):
+class PrivDelViewTests(DelTests, ViewTests):
     view_name = 'privdel'
 
     def create(self, description, name, content):
