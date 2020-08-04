@@ -24,6 +24,7 @@ class FileTests:
         data = self.open(name, content)
         file = self.DriveFile(description=description, data=data)
         file.save()
+        return file
 
     def retrieve(self, name, content):
         data = self.open(name, content)
@@ -43,6 +44,12 @@ class FileTests:
     def assertDoesNotRetrieve(self, name, content):
         self.assertFalse(self.retrieve(name, content))
 
+    def assertDataExists(self, name):
+        self.assertTrue(self.DriveFile.data.field.storage.exists(name))
+
+    def assertDataDoesNotExist(self, name):
+        self.assertFalse(self.DriveFile.data.field.storage.exists(name))
+
     def testRaisesIntegrityErrorIfCreateWithNoneDescription(self):
         self.assertRaisesIntegrityErrorIfCreate(None, self.name, self.content)
 
@@ -58,6 +65,15 @@ class FileTests:
         self.create(self.description, self.name, self.content)
         self.delete(self.name, self.other_content)
         self.assertDoesNotRetrieve(self.name, self.content)
+
+    def testDataExistsAfterCreate(self):
+        self.create(self.description, self.name, self.content)
+        self.assertDataExists(self.name)
+
+    def testDataDoesNotExistAfterCreateAndDelete(self):
+        file = self.create(self.description, self.name, self.content)
+        file.delete()
+        self.assertDataDoesNotExist(self.name)
 
 
 class PublicFileTests(FileTests, IntegrationTestCase):
