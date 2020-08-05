@@ -22,9 +22,7 @@ class FileTests:
 
     def create(self, description, name, content):
         data = self.open(name, content)
-        file = self.DriveFile(description=description, data=data)
-        file.save()
-        return file
+        return self.DriveFile.objects.create(description=description, data=data)
 
     def retrieve(self, name, content):
         data = self.open(name, content)

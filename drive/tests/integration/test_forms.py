@@ -26,8 +26,7 @@ class FileFormTests(IntegrationTestCase):
         if existing is not None:
             existing_description, existing_name, existing_content, DriveFile = existing
             existing_data = File(BytesIO(existing_content), existing_name)
-            file = DriveFile(description=existing_description, data=existing_data)
-            file.save()
+            DriveFile.objects.create(description=existing_description, data=existing_data)
         return File(BytesIO(content), name)
 
     def isValid(self, description, uploaded, private):

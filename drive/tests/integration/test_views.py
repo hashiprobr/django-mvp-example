@@ -16,9 +16,7 @@ class ViewTests(ViewTestCase):
 
     def create(self, description, name, content, DriveFile):
         data = File(BytesIO(content), name)
-        file = DriveFile(description=description, data=data)
-        file.save()
-        return file
+        return DriveFile.objects.create(description=description, data=data)
 
 
 class DriveViewTests(ViewTests):
