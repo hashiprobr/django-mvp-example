@@ -32,7 +32,7 @@ class FileTests:
         data = self.open(name, content)
         self.DriveFile.objects.filter(data=data).delete()
 
-    def assertRaisesIntegrityErrorIfCreate(self, description, name, content):
+    def assertDoesNotCreate(self, description, name, content):
         with self.assertRaises(IntegrityError):
             self.create(description, name, content)
 
@@ -48,8 +48,8 @@ class FileTests:
     def assertDataDoesNotExist(self, name):
         self.assertFalse(self.DriveFile.data.field.storage.exists(name))
 
-    def testRaisesIntegrityErrorIfCreateWithNoneDescription(self):
-        self.assertRaisesIntegrityErrorIfCreate(None, self.name, self.content)
+    def testDoesNotCreateWithNoneDescription(self):
+        self.assertDoesNotCreate(None, self.name, self.content)
 
     def testRetrievesByNameAfterCreate(self):
         self.create(self.description, self.name, self.content)
@@ -68,9 +68,9 @@ class FileTests:
         self.create(self.description, self.name, self.content)
         self.assertDataExists(self.name)
 
-    def testDataDoesNotExistAfterCreateAndDelete(self):
+    def testDataDoesNotExistAfterCreateAndDeleteByName(self):
         file = self.create(self.description, self.name, self.content)
-        file.delete()
+        self.delete(self.name, self.other_content)
         self.assertDataDoesNotExist(self.name)
 
 
