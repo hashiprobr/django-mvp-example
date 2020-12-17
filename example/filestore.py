@@ -32,14 +32,6 @@ class PrivateLocalStorage(LocalStorage):
 
 
 class RemoteStorage(OverwriteStorage, S3Boto3Storage):
-    # TEMP: Force an extra GET between saves to avoid triggering
-    # the issue boto/boto3#1341. This is inefficient and can be
-    # removed if the pull request boto/botocore#1328 is accepted.
-    def save(self, name, content, max_length=None):
-        name = super().save(name, content, max_length)
-        self.size(name)
-        return name
-
     def clear(self):
         self.bucket.objects.delete()
 
