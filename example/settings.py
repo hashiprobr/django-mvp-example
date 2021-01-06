@@ -154,7 +154,7 @@ USE_TZ = True
 
 FILE_UPLOAD_HANDLERS = [
     BASE_NAME + '.uphandler.ChannelMemoryFileUploadHandler',
-    BASE_NAME + '.uphandler.ChannelTemporaryFileUploadHandler',
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
 ]
 
 
