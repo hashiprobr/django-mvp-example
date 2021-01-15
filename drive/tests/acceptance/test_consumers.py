@@ -34,8 +34,8 @@ class ConsumerTests(AcceptanceAsyncTestCase):
             a = li.find_one('a')
             p = li.find('p')[1]
 
-            self.assertEqual(name, self.text(a))
-            self.assertEqual(description, self.text(p))
+            self.assertEqual(name, self.read(a))
+            self.assertEqual(description, self.read(p))
 
         for i in range(len(names), 0, -1):
             folder = self.wait(5, self.driver.find_enabled, selector)
@@ -57,7 +57,7 @@ class ConsumerTests(AcceptanceAsyncTestCase):
     content = 'content'
 
     def contentInLog(self):
-        return self.content in self.driver.find_one('.log').text
+        return self.content in self.read(self.driver.find_one('.log'))
 
     def testChat(self):
         self.get('drive')

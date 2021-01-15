@@ -35,8 +35,8 @@ class DriveViewTests(ViewTests):
         li = html.select_one('.public li')
         a = li.select_one('a')
         p = li.select('p')[1]
-        self.assertEqual(self.name, self.string(a))
-        self.assertEqual(self.description, self.string(p))
+        self.assertEqual(self.name, self.read(a))
+        self.assertEqual(self.description, self.read(p))
         empty = html.select_one('.empty')
 
     def testWithSinglePrivateFile(self):
@@ -45,8 +45,8 @@ class DriveViewTests(ViewTests):
         li = html.select_one('.private li')
         a = li.select_one('a')
         p = li.select('p')[1]
-        self.assertEqual(self.name, self.string(a))
-        self.assertEqual(self.description, self.string(p))
+        self.assertEqual(self.name, self.read(a))
+        self.assertEqual(self.description, self.read(p))
         empty = html.select_one('.empty')
 
     def testWithSinglePublicFileAndSinglePrivateFile(self):
